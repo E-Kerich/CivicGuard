@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- SIMPLE HERO -->
+<div class="text-center py-5 mb-4">
+    <h1 class="fw-bold text-dark mb-3">About CivicGuard</h1>
+    <p class="text-muted fs-5 mx-auto" style="max-width: 600px;">
+        A transparent platform for community safety and institutional accountability.
+    </p>
+</div>
+
+<!-- PURPOSE -->
+<div class="container py-3">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Community Purpose" 
+                 class="img-fluid rounded shadow-sm">
+        </div>
+        <div class="col-md-6">
+            <h2 class="fw-bold mb-3 text-dark">Our Purpose</h2>
+            <p class="text-muted mb-3">
+                CivicGuard provides a simple, secure way for citizens to report incidents and track institutional responses. 
+                We believe transparency builds trust, and accountability strengthens communities.
+            </p>
+            <p class="text-muted">
+                Every report receives attention, every case gets documented, and every outcome is communicated clearly.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- MISSION & VISION -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="card border-0 bg-white shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold mb-3 text-dark">Mission</h3>
+                        <p class="text-muted">
+                            Empower communities with transparent reporting tools that ensure every voice is heard 
+                            and every incident receives proper attention and follow-up.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 bg-white shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold mb-3 text-dark">Vision</h3>
+                        <p class="text-muted">
+                            A society where citizens trust institutions, and institutions respond with integrity, 
+                            creating safer, more transparent communities for everyone.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- SDG CONNECTION -->
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <h2 class="fw-bold mb-3 text-dark">Supporting SDG 16</h2>
+            <p class="text-muted mb-3">
+                CivicGuard aligns with the UN Sustainable Development Goal 16: Peace, Justice, and Strong Institutions.
+            </p>
+            <p class="text-muted">
+                By promoting transparent reporting and institutional accountability, we contribute to building 
+                peaceful, inclusive societies with effective, responsive institutions.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="SDG 16" 
+                 class="img-fluid rounded shadow-sm">
+        </div>
+    </div>
+</div>
+
+<!-- SIMPLE CTA -->
+<div class="bg-dark text-white text-center py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-3">Make a Difference</h2>
+        <p class="text-light mb-4 mx-auto" style="max-width: 500px;">
+            Report concerns, follow updates, or support our mission to build safer communities.
+        </p>
+        <a href="/report/" class="btn btn-light btn-lg px-4">Report an Incident</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+img {
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+</style>
+{% endblock %}

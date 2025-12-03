@@ -1,0 +1,95 @@
+{% extends 'incidents/admin_base.html' %}
+
+{% block content %}
+
+<h2 class="fw-bold" style="color:#002855;">Dashboard Overview</h2>
+<p class="text-muted mb-4">Welcome, admin. Here is your summary:</p>
+
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3">
+            <h5>Total Incidents</h5>
+            <h3 class="fw-bold">{{ total_incidents }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3">
+            <h5>Pending</h5>
+            <h3 class="fw-bold text-warning">{{ pending_incidents }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3">
+            <h5>Solved</h5>
+            <h3 class="fw-bold text-success">{{ solved_incidents }}</h3>
+        </div>
+    </div>
+
+</div>
+
+<hr class="my-5">
+
+<h4 class="fw-bold mb-4" style="color:#002855;">Incident Analytics</h4>
+
+<div class="row g-4">
+
+    <!-- Status Distribution Chart -->
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h6 class="fw-bold mb-3">Incident Status Distribution</h6>
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Category Chart -->
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h6 class="fw-bold mb-3">Incidents by Category</h6>
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // STATUS CHART
+    const statusData = {
+        labels: ['Pending', 'Reviewed', 'Solved'],
+        datasets: [{
+            label: 'Incidents',
+            data: [{{ pending_incidents }}, {{ reviewed_incidents }}, {{ solved_incidents }}],
+            backgroundColor: ['#ffc107', '#0dcaf0', '#198754'],
+        }]
+    };
+
+    new Chart(document.getElementById('statusChart'), {
+        type: 'doughnut',
+        data: statusData,
+    });
+
+    // CATEGORY CHART
+    const categoryLabels = [
+        {% for key, value in categories.items %}'{{ key }}',{% endfor %}
+    ];
+    const categoryValues = [
+        {% for key, value in categories.items %}{{ value }},{% endfor %}
+    ];
+
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'bar',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                label: 'Incidents',
+                data: categoryValues,
+                backgroundColor: '#002855',
+            }]
+        },
+    });
+</script>
+
+
+{% endblock %}

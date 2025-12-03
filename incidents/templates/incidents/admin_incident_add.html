@@ -1,0 +1,58 @@
+{% extends 'incidents/admin_base.html' %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4" style="color:#002855;">Add New Incident</h2>
+
+<div class="card shadow-sm p-4">
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h5 class="fw-bold mb-3">User Information</h5>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="user_name" class="form-control" placeholder="User name" required>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Email</label>
+                <input type="email" name="user_email" class="form-control" placeholder="User email" required>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Phone</label>
+                <input type="text" name="user_phone" class="form-control" placeholder="Optional">
+            </div>
+        </div>
+
+        <h5 class="fw-bold mb-3">Incident Information</h5>
+
+        <div class="mb-3">
+            <label class="form-label">Incident Type</label>
+            <input type="text" name="incident_type" class="form-control" placeholder="e.g., Safety, Misconduct" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Location</label>
+            <input type="text" name="location" class="form-control" placeholder="Where the incident occurred">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea name="description" rows="5" class="form-control" placeholder="Describe the incident" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Evidence File (Optional)</label>
+            <input type="file" name="evidence_file" class="form-control">
+        </div>
+
+        <button class="btn btn-primary px-4 mt-3">Submit Incident</button>
+    </form>
+
+</div>
+
+{% endblock %}

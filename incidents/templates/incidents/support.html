@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="text-center py-5">
+    <h1 class="fw-bold text-dark mb-3">Support CivicGuard</h1>
+    <p class="text-muted fs-5 mx-auto" style="max-width: 600px;">
+        Your contribution strengthens transparency, justice, and community safety.
+    </p>
+</div>
+
+<!-- WHY SUPPORT -->
+<div class="container py-3">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Community Support" 
+                 class="img-fluid rounded shadow-sm h-100">
+        </div>
+        <div class="col-md-6">
+            <h2 class="fw-light mb-3 text-dark">Why Your Support Matters</h2>
+            <p class="text-muted mb-3">
+                CivicGuard is a community-centered platform that ensures every reported incident receives attention, 
+                follow-up, and public communication.
+            </p>
+            <p class="text-muted">
+                Your contribution helps maintain this transparent system, improve digital access, and support fair 
+                investigations that strengthen community trust. Together, we can build a safer and more accountable society.
+                When you support CivicGuard, you're investing in justice and transparency for all. Because every voice deserves to be heard.
+            </p>
+            <p class="text-muted">
+                Join us in making a difference, one report, one case, one community at a time. Your support fuels change. Together, we can create a future where accountability is the norm, and trust is rebuilt.
+        </div>
+    </div>
+</div>
+
+<!-- IMPACT -->
+<div class=" py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4 text-dark">How Your Contribution Helps</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 bg-white shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-2 text-dark">Digital Infrastructure</h5>
+                        <p class="text-muted small">Maintain secure platform operations and data protection.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 bg-white shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-2 text-dark">Transparency Tools</h5>
+                        <p class="text-muted small">Keep public dashboards updated with case progress.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 bg-white shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-2 text-dark">Community Trust</h5>
+                        <p class="text-muted small">Enable fair investigations and clear communication.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DONATION FORM -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="fw-bold text-center mb-4 text-dark">Make a Contribution</h2>
+                    
+                    <form action="/donate/" method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label text-dark fw-medium">Phone Number (MPesa)</label>
+                            <input type="text" 
+                                   name="phone" 
+                                   placeholder="07XXXXXXXX" 
+                                   class="form-control py-2" 
+                                   required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-dark fw-medium">Amount (KES)</label>
+                            <input type="number" 
+                                   name="amount" 
+                                   placeholder="Enter amount" 
+                                   class="form-control py-2" 
+                                   min="10" 
+                                   required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 py-2">
+                            Support via MPesa
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <small class="text-muted">
+                            All contributions support community safety and transparency initiatives.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- THANK YOU -->
+<div class="bg-dark text-white text-center py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-3">Thank You</h2>
+        <p class="text-light mb-4 mx-auto" style="max-width: 500px;">
+            Your support helps build a fairer, safer, and more accountable society.
+        </p>
+        <a href="/" class="btn btn-light btn-sm px-4">Return Home</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.form-control {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.1);
+}
+
+.btn-success {
+    border-radius: 6px;
+    font-weight: 500;
+}
+</style>
+{% endblock %}

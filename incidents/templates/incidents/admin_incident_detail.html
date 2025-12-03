@@ -1,0 +1,84 @@
+{% extends 'incidents/admin_base.html' %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4" style="color:#002855;">Incident Details</h2>
+
+<div class="card shadow-sm p-4 mb-4">
+    <h5 class="fw-bold">Incident Information</h5>
+
+    <p><strong>Reference ID:</strong> {{ incident.reference_id }}</p>
+    <p><strong>Type:</strong> {{ incident.incident_type }}</p>
+    <p><strong>Description:</strong> {{ incident.description }}</p>
+    <p><strong>Location:</strong> {{ incident.location }}</p>
+    <p><strong>Date Lodged:</strong> {{ incident.date_lodged|date:"M d, Y H:i" }}</p>
+
+    {% if incident.evidence_file %}
+    <p><strong>Evidence:</strong></p>
+
+    {% with file=incident.evidence_file.url|lower %}
+        {% if ".jpg" in file or ".jpeg" in file or ".png" in file or ".gif" in file %}
+            
+            <!-- Show image preview -->
+            <img src="{{ incident.evidence_file.url }}" 
+                 class="img-fluid border rounded mb-3" 
+                 alt="Evidence Image"
+                 style="max-height: 300px; object-fit: contain;">
+
+        {% else %}
+            
+            <!-- Download button for non-image files -->
+            <a href="{{ incident.evidence_file.url }}" 
+               target="_blank" 
+               class="btn btn-sm btn-outline-primary">
+                Download Evidence
+            </a>
+
+        {% endif %}
+    {% endwith %}
+
+{% else %}
+    <p class="text-muted">No evidence uploaded.</p>
+{% endif %}
+
+</div>
+
+<div class="card shadow-sm p-4 mb-4">
+    <h5 class="fw-bold">User Information</h5>
+
+    <p><strong>Name:</strong> {{ incident.user_name }}</p>
+    <p><strong>Email:</strong> {{ incident.user_email }}</p>
+    <p><strong>Phone:</strong> {{ incident.user_phone }}</p>
+</div>
+
+<div class="card shadow-sm p-4 mb-5">
+    <h5 class="fw-bold mb-3">Admin Actions</h5>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                <option value="Pending" {% if incident.status == "Pending" %}selected{% endif %}>Pending</option>
+                <option value="Reviewed" {% if incident.status == "Reviewed" %}selected{% endif %}>Reviewed</option>
+                <option value="Solved" {% if incident.status == "Solved" %}selected{% endif %}>Solved</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Admin Notes</label>
+            <textarea name="admin_notes" class="form-control" rows="3">{{ incident.admin_notes }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Final Report (Public)</label>
+            <textarea name="admin_report" class="form-control" rows="6">{{ incident.admin_report }}</textarea>
+            <small class="text-muted">This will appear on the public transparency dashboard once marked as 'Solved'.</small>
+        </div>
+
+        <button class="btn btn-primary mt-3 px-4">Save Changes</button>
+    </form>
+</div>
+
+{% endblock %}

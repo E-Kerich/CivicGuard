@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block content %}
+
+<style>
+    /* Extra responsive spacing */
+    @media (max-width: 576px) {
+        .form-label {
+            font-size: 13px !important;
+        }
+        .responsive-card {
+            padding: 20px !important;
+        }
+        h1.fw-bold {
+            font-size: 1.6rem !important;
+        }
+        .btn-primary {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container mt-4 mb-5">
+
+    <!-- PAGE HEADER -->
+    <div class="text-center mb-4">
+        <h1 class="fw-bold" style="color:#002855;">Report an Incident</h1>
+        <p class="text-muted">Submit your concern securely. Our team will review and update you promptly.</p>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="card shadow-sm border-0 responsive-card p-5" style="border-radius: 10px;">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- USER SECTION -->
+            <h5 class="fw-semibold mb-3" style="color:#002855;">Your Information</h5>
+
+            <div class="row g-3 mb-4">
+
+                <!-- NAME -->
+                <div class="col-12 col-md-6">
+                    <label class="form-label small text-muted">Full Name</label>
+                    {{ form.user_name|add_class:"form-control" }}
+                </div>
+
+                <!-- EMAIL -->
+                <div class="col-12 col-md-6">
+                    <label class="form-label small text-muted">Email Address</label>
+                    {{ form.user_email|add_class:"form-control" }}
+                </div>
+            </div>
+
+            <!-- PHONE -->
+            <div class="mb-4">
+                <label class="form-label small text-muted">Phone Number (Optional)</label>
+                {{ form.user_phone|add_class:"form-control" }}
+            </div>
+
+            <hr class="my-4">
+
+            <!-- INCIDENT SECTION -->
+            <h5 class="fw-semibold mb-3" style="color:#002855;">Incident Details</h5>
+
+            <!-- INCIDENT TYPE -->
+            <div class="mb-4">
+                <label class="form-label small text-muted">Type of Incident</label>
+                {{ form.incident_type|add_class:"form-control" }}
+            </div>
+
+            <!-- LOCATION -->
+            <div class="mb-4">
+                <label class="form-label small text-muted">Location</label>
+                {{ form.location|add_class:"form-control" }}
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="mb-4">
+                <label class="form-label small text-muted">Description</label>
+                {{ form.description|add_class:"form-control" }}
+            </div>
+
+            <!-- FILE UPLOAD -->
+            <div class="mb-4">
+                <label class="form-label small text-muted">Upload Evidence (Optional)</label><br>
+                {{ form.evidence_file|add_class:"form-control" }}
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary px-4 py-2">
+                    Submit Incident
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

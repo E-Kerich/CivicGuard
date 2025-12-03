@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    @media (max-width: 576px) {
+        .login-card { padding: 20px !important; }
+        h2 { font-size: 1.6rem !important; }
+        .btn-primary { width: 100%; }
+    }
+</style>
+
+<div class="container mt-5 d-flex justify-content-center">
+
+    <div class="card shadow-sm border-0 p-5 login-card" style="max-width: 450px; width: 100%; border-radius: 10px;">
+
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color:#002855;">Admin Login</h2>
+            <p class="text-muted">Authorized access only</p>
+        </div>
+
+        {% if error %}
+            <div class="alert alert-danger py-2">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label small text-muted">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Enter admin username" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small text-muted">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary px-4 py-2">Login</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

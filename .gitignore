@@ -1,0 +1,57 @@
+# ---- PYTHON ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---- DJANGO ----
+*.log
+*.pot
+*.pyc
+*.pyo
+*.mo
+*.db.sqlite3
+db.sqlite3
+
+# Django migrations (keep the folder, ignore files)
+*/migrations/*
+!*/migrations/__init__.py
+
+# ---- ENVIRONMENT FILES ----
+.env
+.env.local
+.env.development
+.env.production
+
+# ---- VIRTUAL ENVIRONMENT ----
+venv/
+env/
+ENV/
+.venv/
+.virtualenv/
+
+# ---- STATIC & MEDIA (Generated files) ----
+staticfiles/
+static/
+media/
+
+# ---- BUILD / COMPILED ----
+build/
+dist/
+*.egg-info/
+
+# ---- EDITOR FILES ----
+.vscode/
+.idea/
+
+# ---- OS FILES ----
+.DS_Store
+Thumbs.db
+
+# ---- CACHE ----
+.cache/
+*.bak
+
+# ---- PYTEST / TESTING ----
+.coverage
+htmlcov/
+.pytest_cache/

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    /* Smooth fade-in animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .thank-container {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @media (max-width: 576px) {
+        h1.fw-bold {
+            font-size: 1.7rem !important;
+        }
+        .lead {
+            font-size: 1rem !important;
+        }
+        .btn-primary {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container mt-5 thank-container">
+
+    <div class="text-center">
+
+        <!-- Success Icon -->
+        <div class="mb-4">
+            <svg width="85" height="85" fill="#28a745" viewBox="0 0 16 16">
+                <path d="M13.485 1.929A8 8 0 1 0 2.515 14.07 8 8 0 0 0 13.485 1.93zM8 
+                15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm3.146-9.854a.5.5 0 
+                0 0-.708-.708L7 7.293 5.354 5.646a.5.5 0 
+                1 0-.708.708L7 8.707l4.146-4.147z"/>
+            </svg>
+        </div>
+
+        <!-- Heading -->
+        <h1 class="fw-bold" style="color:#002855;">Thank You</h1>
+
+        <!-- Message -->
+        <p class="lead mt-3 text-muted">
+            Your incident has been successfully submitted.  
+            Our team is now reviewing your report and will update you via email.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="mt-4">
+            <a href="/" class="btn btn-primary px-4 py-2 me-2">Return Home</a>
+            <a href="/report/" class="btn btn-outline-secondary px-4 py-2">Submit Another Report</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

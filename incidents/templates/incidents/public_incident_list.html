@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center mb-5">
+    <h1 class="fw-bold" style="color:#002855;">Community Incident Reports</h1>
+    <p class="text-muted">Transparent updates on incidents reported and handled through CivicGuard.</p>
+</div>
+
+<!-- SECTION: PENDING -->
+<h3 class="fw-bold mt-4" style="color:#002855;">Pending Incidents</h3>
+<p class="text-muted">These incidents are awaiting review.</p>
+
+<div class="row g-4 mb-5">
+    {% for incident in pending %}
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100 p-3">
+            <h5 class="fw-bold">{{ incident.incident_type }}</h5>
+            <p class="text-muted small">{{ incident.date_lodged|date:"M d, Y" }}</p>
+            <p>{{ incident.description|truncatewords:20 }}</p>
+
+            <span class="badge bg-warning text-dark">Pending</span>
+
+            <a href="{% url 'public_incident_detail' incident.id %}" class="btn btn-outline-primary btn-sm mt-3">
+                Read More
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No pending incidents.</p>
+    {% endfor %}
+</div>
+
+<!-- SECTION: REVIEWED -->
+<h3 class="fw-bold mt-4" style="color:#002855;">Reviewed Incidents</h3>
+<p class="text-muted">Admin has reviewed and is preparing a final report.</p>
+
+<div class="row g-4 mb-5">
+    {% for incident in reviewed %}
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100 p-3">
+            <h5 class="fw-bold">{{ incident.incident_type }}</h5>
+            <p class="text-muted small">{{ incident.date_lodged|date:"M d, Y" }}</p>
+            <p>{{ incident.description|truncatewords:20 }}</p>
+
+            <span class="badge bg-info text-dark">Reviewed</span>
+
+            <a href="{% url 'public_incident_detail' incident.id %}" class="btn btn-outline-primary btn-sm mt-3">
+                Read More
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No reviewed incidents.</p>
+    {% endfor %}
+</div>
+
+<!-- SECTION: SOLVED -->
+<h3 class="fw-bold mt-4" style="color:#002855;">Solved Incidents</h3>
+<p class="text-muted">These incidents have been resolved and include final admin reports.</p>
+
+<div class="row g-4 mb-5">
+    {% for incident in solved %}
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100 p-3">
+            <h5 class="fw-bold">{{ incident.incident_type }}</h5>
+            <p class="text-muted small">{{ incident.date_lodged|date:"M d, Y" }}</p>
+            <p>{{ incident.description|truncatewords:20 }}</p>
+
+            <span class="badge bg-success">Solved</span>
+
+            <a href="{% url 'public_incident_detail' incident.id %}" class="btn btn-outline-primary btn-sm mt-3">
+                Read More
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No solved incidents.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

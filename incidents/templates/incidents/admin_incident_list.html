@@ -1,0 +1,72 @@
+{% extends 'incidents/admin_base.html' %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4" style="color:#002855;">Manage Incidents</h2>
+
+<div class="card shadow-sm p-4">
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Ref ID</th>
+                    <th>Type</th>
+                    <th>User</th>
+                    <th>Date Lodged</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for incident in incidents %}
+                <tr>
+                    <td>{{ incident.reference_id }}</td>
+                    <td>{{ incident.incident_type }}</td>
+                    <td>{{ incident.user_name }}</td>
+                    <td>{{ incident.date_lodged|date:"M d, Y" }}</td>
+
+                    <td>
+                        {% if incident.status == "Pending" %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif incident.status == "Reviewed" %}
+                            <span class="badge bg-info text-dark">Reviewed</span>
+                        {% elif incident.status == "Solved" %}
+                            <span class="badge bg-success">Solved</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-end">
+
+                        <!-- View -->
+                        <a href="{% url 'admin_incident_detail' incident.id %}" 
+                           class="btn btn-sm btn-primary">View</a>
+
+                        <!-- Edit -->
+                        <a href="{% url 'admin_incident_edit' incident.id %}" 
+                           class="btn btn-sm btn-secondary">Edit</a>
+
+                        <!-- Delete -->
+                        <a href="{% url 'admin_incident_delete' incident.id %}" 
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this incident?')">
+                           Delete
+                        </a>
+
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        No incidents found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

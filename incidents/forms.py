@@ -1,5 +1,6 @@
 from django import forms
 from .models import Incident
+from .models import Donation
 
 class IncidentForm(forms.ModelForm):
     class Meta:
@@ -17,3 +18,7 @@ class IncidentForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
+
+
+
+

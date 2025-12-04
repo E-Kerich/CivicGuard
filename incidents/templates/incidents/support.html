@@ -35,10 +35,91 @@
     </div>
 </div>
 
+
+
+<div class="container text-center">
+
+    <h1 class="fw-bold text-dark">Support CivicGuard</h1>
+    <p class="mt-3 text-muted">
+        Your monthly contribution helps us strengthen transparency, accountability, and community safety.
+    </p>
+
+    <button class="btn btn-outline-primary rounded btn-lg mt-4" data-bs-toggle="modal" data-bs-target="#donationModal">
+        Support via MPesa
+    </button>
+
+    <div id="loadingSpinner" class="text-center mt-3" style="display:none;">
+        <div class="spinner-border text-primary"></div>
+        <p class="text-muted small mt-2">Processing donation...</p>
+    </div>
+    
+    
+</div>
+
+
+<!-- DONATION MODAL -->
+<!-- DONATION MODAL -->
+<div class="modal fade" id="donationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3 position-relative">
+  
+        <!-- Overlay Spinner -->
+        <div id="modalSpinner" class="spinner-overlay" style="display:none;">
+          <div class="spinner-border text-white"></div>
+        </div>
+  
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Support via MPesa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <div class="modal-body">
+  
+          <form id="donationForm" method="POST" action="{% url 'process_donation' %}">
+              {% csrf_token %}
+          
+              <div class="mb-3">
+                  <label class="form-label fw-semibold">Phone Number</label>
+                  <input type="text" name="phone" class="form-control" placeholder="07XXXXXXXX" required>
+              </div>
+          
+              <div class="mb-3">
+                  <label class="form-label fw-semibold">Subscription Plan</label>
+                  <select name="plan" class="form-select" required id="planSelect">
+                      <option disabled selected>Select a Plan</option>
+                      <option value="Monthly - 100">Monthly — 100 KES</option>
+                      <option value="Quarterly - 250">Quarterly — 250 KES</option>
+                      <option value="Annually - 1000">Annual — 1000 KES</option>
+                      <option value="Custom">Custom Amount</option>
+                  </select>
+              </div>
+          
+              <div id="customAmountField" class="mb-3" style="display: none;">
+                  <label class="form-label fw-semibold">Custom Amount (KES)</label>
+                  <input type="number" name="amount" class="form-control">
+              </div>
+          </form>
+          
+        </div>
+  
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" form="donationForm" class="btn btn-primary px-4" id="donateBtn">
+              Donate
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+
 <!-- IMPACT -->
 <div class=" py-5">
     <div class="container">
-        <h2 class="fw-bold text-center mb-4 text-dark">How Your Contribution Helps</h2>
         
         <div class="row g-4">
             <div class="col-md-4">
@@ -69,53 +150,67 @@
     </div>
 </div>
 
-<!-- DONATION FORM -->
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h2 class="fw-bold text-center mb-4 text-dark">Make a Contribution</h2>
-                    
-                    <form action="/donate/" method="POST">
-                        {% csrf_token %}
-                        
-                        <div class="mb-4">
-                            <label class="form-label text-dark fw-medium">Phone Number (MPesa)</label>
-                            <input type="text" 
-                                   name="phone" 
-                                   placeholder="07XXXXXXXX" 
-                                   class="form-control py-2" 
-                                   required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label text-dark fw-medium">Amount (KES)</label>
-                            <input type="number" 
-                                   name="amount" 
-                                   placeholder="Enter amount" 
-                                   class="form-control py-2" 
-                                   min="10" 
-                                   required>
-                        </div>
-
-                        <button type="submit" class="btn btn-success w-100 py-2">
-                            Support via MPesa
-                        </button>
-                    </form>
-                    
-                    <div class="text-center mt-4">
-                        <small class="text-muted">
-                            All contributions support community safety and transparency initiatives.
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
+<script>
+    document.getElementById("planSelect").addEventListener("change", function () {
+        document.getElementById("customAmountField").style.display =
+            this.value === "Custom" ? "block" : "none";
+    });
+    
+    document.getElementById("donationForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+    
+        let donateBtn = document.getElementById("donateBtn");
+        let modalSpinner = document.getElementById("modalSpinner");
+    
+        donateBtn.disabled = true;
+        modalSpinner.style.display = "flex";
+    
+        let formData = new FormData(this);
+    
+        fetch("{% url 'process_donation' %}", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+
+                showToast("STK Push sent! Check your phone to complete donation.", "success");
+
+                donateBtn.disabled = false;
+                spinner.style.display = "none";
+
+                // Reset form
+                document.getElementById("donationForm").reset();
+                document.getElementById("customAmountField").style.display = "none";
+
+                // Auto-close modal after 2 seconds
+                setTimeout(() => {
+                    let donationModal = bootstrap.Modal.getInstance(document.getElementById('donationModal'));
+                    donationModal.hide();
+                }, 2000);
+                document.getElementById("donationModal").classList.add("fade");
+
+
+        })
+        .catch(error => {
+            showToast("Network error. Try again.", "danger");
+            donateBtn.disabled = false;
+            modalSpinner.style.display = "none";
+        });
+    });
+    
+    function showToast(message, type) {
+        let toastEl = document.getElementById("toastAlert");
+        let toastMsg = document.getElementById("toastMessage");
+        toastMsg.innerText = message;
+        toastEl.className = "toast align-items-center text-white bg-" + type;
+        new bootstrap.Toast(toastEl).show();
+    }
+    </script>
+    
+    
 
 {% endblock %}
 
@@ -144,5 +239,20 @@
     border-radius: 6px;
     font-weight: 500;
 }
+
+.spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    border-radius: 8px;
+}
+
 </style>
 {% endblock %}

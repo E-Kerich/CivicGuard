@@ -5,6 +5,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Incident
 
+import requests
+from django.http import JsonResponse
+from .models import Donation
+import base64
+import datetime
+import json
+from django.views.decorators.csrf import csrf_exempt
+
+
+
 def home(request):
     return render(request, 'incidents/home.html')
 
@@ -215,3 +225,153 @@ def public_incident_detail(request, incident_id):
         'incident': incident
     })
 
+# Dashboard donation
+
+
+
+
+def generate_mpesa_access_token():
+    consumer_key = ENV['MPESA_CONSUMER_KEY']
+    consumer_secret = ENV['MPESA_CONSUMER_SECRET']
+
+    api_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    r = requests.get(api_url, auth=(consumer_key, consumer_secret))
+    return r.json()['access_token']
+
+
+def process_donation(request):
+    if request.method == "POST":
+        phone = request.POST.get("phone").strip()
+        # Ensure MPesa format is correct
+        if phone.startswith("07"):
+            phone = "254" + phone[1:]
+        elif phone.startswith("+254"):
+            phone = phone[1:]
+        elif phone.startswith("254") == False:
+            return JsonResponse({"message": "Invalid phone format"}, status=400)
+
+        plan = request.POST.get("plan")
+
+        if plan == "Custom":
+            amount = request.POST.get("amount")
+        else:
+            amount = plan.split("-")[1].strip()  # Extract number
+
+        donation = Donation.objects.create(
+            phone_number=phone,
+            amount=amount,
+            subscription_plan=plan
+        )
+
+        # MPesa STK PUSH
+        access_token = generate_mpesa_access_token()
+        stk_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        shortcode = ENV['MPESA_SHORTCODE']
+        passkey = ENV['MPESA_PASSKEY']
+        password = base64.b64encode((shortcode + passkey + timestamp).encode()).decode("utf-8")
+
+        payload = {
+            "BusinessShortCode": shortcode,
+            "Password": password,
+            "Timestamp": timestamp,
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": shortcode,
+            "PhoneNumber": phone,
+            "CallBackURL": "https://trichenest.com/mpesa/callback/",
+            "AccountReference": "CivicGuard Support",
+            "TransactionDesc": "Subscription Donation"
+        }
+
+        headers = {
+            "Authorization": "Bearer %s" % access_token
+        }
+
+        response = requests.post(stk_url, json=payload, headers=headers)
+
+        return JsonResponse({"message": "Donation request sent", "response": response.json()})
+
+
+
+
+
+@csrf_exempt
+def mpesa_callback(request):
+    if request.method == "POST":
+        callback_data = json.loads(request.body.decode('utf-8'))
+
+        # Extract required fields
+        try:
+            result_code = callback_data['Body']['stkCallback']['ResultCode']
+            result_desc = callback_data['Body']['stkCallback']['ResultDesc']
+            checkout_request_id = callback_data['Body']['stkCallback']['CheckoutRequestID']
+
+            # If payment failed, stop here.
+            if result_code != 0:
+                print("Payment failed:", result_desc)
+                return HttpResponse("Callback received", status=200)
+
+            # Extract metadata (only exists when payment is successful)
+            metadata_items = callback_data['Body']['stkCallback']['CallbackMetadata']['Item']
+
+            mpesa_receipt = None
+            phone_number = None
+            amount = None
+
+            # Loop through metadata
+            for item in metadata_items:
+                if item['Name'] == "MpesaReceiptNumber":
+                    mpesa_receipt = item['Value']
+                if item['Name'] == "PhoneNumber":
+                    phone_number = item['Value']
+                if item['Name'] == "Amount":
+                    amount = item['Value']
+
+            # GET THE DONATION RECORD
+            from .models import Donation
+            donation = Donation.objects.filter(
+                phone_number=str(phone_number)[-9:]  # match phone properly
+            ).last()
+
+            if donation:
+                donation.status = "Paid"
+                donation.mpesa_receipt = mpesa_receipt
+                donation.save()
+
+            print("PAYMENT VERIFIED:", mpesa_receipt, amount, phone_number)
+
+        except Exception as e:
+            print("Callback error:", e)
+
+        return HttpResponse("Callback received", status=200)
+
+
+@login_required(login_url='admin_login')
+def admin_donations(request):
+    donations = Donation.objects.order_by('-created_at')
+
+    return render(request, 'incidents/admin_donations.html', {
+        'donations': donations
+    })
+
+# Delete donations
+@login_required(login_url='admin_login')
+def admin_donation_delete(request, donation_id):
+    donation = Donation.objects.get(id=donation_id)
+
+    if request.method == "POST":
+        donation.delete()
+        return redirect('admin_donations')
+
+    return render(request, 'incidents/admin_donation_delete.html', {
+        'donation': donation
+    })
+
+
+
+# Donation success
+def donation_success(request):
+    return render(request, "incidents/donation_success.html")

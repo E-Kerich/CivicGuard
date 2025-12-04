@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 import uuid
 
+
 STATUS_CHOICES = (
     ('Pending', 'Pending'),
     ('Reviewed', 'Reviewed'),
@@ -44,3 +45,18 @@ class Incident(models.Model):
 
     def __str__(self):
         return f"{self.reference_id} - {self.incident_type}"
+
+
+
+
+class Donation(models.Model):
+    phone_number = models.CharField(max_length=20)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    subscription_plan = models.CharField(max_length=50, blank=True, null=True)
+    mpesa_receipt = models.CharField(max_length=50, blank=True, null=True)
+    status = models.CharField(max_length=20, default="Pending")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.phone_number} - {self.amount} KES"
+

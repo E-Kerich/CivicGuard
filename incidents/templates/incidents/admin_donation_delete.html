@@ -1,0 +1,30 @@
+{% extends 'incidents/admin_base.html' %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4" style="color:#002855;">Delete Donation</h2>
+
+<div class="card shadow-sm p-4">
+
+    <p>Are you sure you want to delete this donation record?</p>
+
+    <ul>
+        <li><strong>Phone:</strong> {{ donation.phone_number }}</li>
+        <li><strong>Amount:</strong> {{ donation.amount }} KES</li>
+        <li><strong>Plan:</strong> {{ donation.subscription_plan }}</li>
+        <li><strong>Status:</strong> {{ donation.status }}</li>
+        {% if donation.mpesa_receipt %}
+        <li><strong>Receipt:</strong> {{ donation.mpesa_receipt }}</li>
+        {% endif %}
+    </ul>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-danger px-4">Delete</button>
+        <a href="{% url 'admin_donations' %}" class="btn btn-secondary px-4 ms-2">Cancel</a>
+    </form>
+
+</div>
+
+{% endblock %}

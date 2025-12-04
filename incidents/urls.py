@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.urls import path, include
+from django.contrib import admin
 
 
 urlpatterns = [
@@ -28,6 +30,23 @@ urlpatterns = [
     # Public dashboard route
     path('incidents/', views.public_incident_list, name='public_incident_list'),
     path('incidents/<int:incident_id>/', views.public_incident_detail, name='public_incident_detail'),
+
+    # Mpesa Integration
+   
+    path('donate/', views.process_donation, name='process_donation'),
+    path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
+
+    # Donation dashboard
+    path('dashboard/donations/', views.admin_donations, name='admin_donations'),
+    path('dashboard/donations/<int:donation_id>/delete/', views.admin_donation_delete, name='admin_donation_delete'),
+
+    path('donate/success/', views.donation_success, name='donation_success'),
+
+
+
+
+
+
 
 
 

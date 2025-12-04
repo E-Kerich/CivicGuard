@@ -135,15 +135,6 @@ This fulfills the transparency goal of SDG 16.
 
 ---
 
-## Tech Stack
 
-- **Backend:** Django (Python)  
-- **Frontend:** HTML, Bootstrap 5  
-- **Database:** SQLite (development)  
-- **Charts:** Chart.js  
-- **Authentication:** Django auth system  
-- **File Uploads:** Django FileField  
-
----
 
 
